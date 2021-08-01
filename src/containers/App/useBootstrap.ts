@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { signInAction } from '../../common/app/actions';
@@ -7,7 +7,6 @@ import { isLoggedSelector } from '../../common/app/selectors';
 import { checkLsAccessToken } from '../../utils/tokens';
 
 type ReturnType = {
-  checkToken: () => void;
   isLogged: boolean;
 };
 
@@ -20,8 +19,9 @@ const useBootstrap = (): ReturnType => {
     dispatch(signInAction(checkLsAccessToken()));
   }, [dispatch]);
 
+  useEffect(() => checkToken(), []);
+
   return {
-    checkToken,
     isLogged,
   };
 };

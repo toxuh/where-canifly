@@ -1,13 +1,12 @@
-import { LOG_IN } from './constants';
-import { Position } from './types';
+import { LOG_IN, SET_POSITION } from './constants';
+import { Position, SetPositionAction, SignInAction } from './types';
 
-/* eslint-disable-next-line */
-export const signInAction = (data: boolean) => ({
+export const signInAction = (data: boolean): SignInAction => ({
   type: LOG_IN,
   payload: data,
 });
 
-export const setPositionAction = (data: boolean) => ({
-  type: LOG_IN,
+export const setPositionAction = (data: Position): SetPositionAction => ({
+  type: SET_POSITION,
   payload: data,
 });

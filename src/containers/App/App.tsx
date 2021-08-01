@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
 
 import Layout from '../Layout/Layout';
@@ -11,9 +11,7 @@ import useBootstrap from './useBootstrap';
 import './App.css';
 
 const App: React.FC = () => {
-  const { checkToken, isLogged } = useBootstrap();
-
-  useEffect(() => checkToken(), []);
+  const { isLogged } = useBootstrap();
 
   if (!isLogged) {
     return (
@@ -29,9 +27,7 @@ const App: React.FC = () => {
 
   return (
     <Layout>
-      <div className="App">
-        <Map />
-      </div>
+      <Map />
     </Layout>
   );
 };
