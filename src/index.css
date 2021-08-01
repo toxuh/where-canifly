@@ -1,0 +1,6 @@
+@import '~antd/dist/antd.css';
+@import '~react-toastify/dist/ReactToastify.css';
+
+html, body, #root {
+  min-height: 100vh;
+}

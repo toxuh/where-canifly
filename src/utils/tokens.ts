@@ -4,9 +4,12 @@ import { LS_ACCESS_TOKEN_NAME, LS_REFRESH_TOKEN_NAME } from '../constants';
 
 let accessToken = '';
 
-const saveTokens = (access: string, refresh: string): void => {
+const saveTokens = (access: string, refresh?: string): void => {
   ls.set(LS_ACCESS_TOKEN_NAME, access);
-  ls.set(LS_REFRESH_TOKEN_NAME, refresh);
+
+  if (refresh) {
+    ls.set(LS_REFRESH_TOKEN_NAME, refresh);
+  }
 
   accessToken = access;
 };

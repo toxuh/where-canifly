@@ -5,3 +5,5 @@ export const API_VERSION = '1';
 
 export const LS_ACCESS_TOKEN_NAME = 'c-tka';
 export const LS_REFRESH_TOKEN_NAME = 'c-tkr';
+
+export const GOOGLE_API_KEY = process.env.REACT_APP__GOOGLE_API_KEY;

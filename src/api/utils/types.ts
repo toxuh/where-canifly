@@ -11,3 +11,14 @@ export type RequestConfig = AxiosRequestConfig & OwnRequestConfig;
 export type Response = AxiosResponse<AnyObject> & {
   response: AxiosResponse<AnyObject>;
 };
+
+export type ErrorResponse = {
+  response?: {
+    config: AnyObject;
+    data: AnyObject;
+    headers: AnyObject;
+    request: AnyObject;
+    status: number;
+    statusText: string;
+  };
+};
