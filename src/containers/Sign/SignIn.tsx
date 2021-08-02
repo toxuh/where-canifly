@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Checkbox, Form, Input, Typography } from 'antd';
+import { Button, Form, Input, Typography } from 'antd';
 
 import useSign from './useSign';
 import './Sign.scss';
@@ -15,6 +15,7 @@ const SignIn: React.FC = () => {
       <Title level={3}>Sign in</Title>
       <Form
         name="sign-in"
+        layout="vertical"
         initialValues={{ remember: false }}
         onFinish={signIn}
         onFinishFailed={(data) => console.log(data)}
@@ -33,14 +34,7 @@ const SignIn: React.FC = () => {
         >
           <Input.Password />
         </Form.Item>
-        <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{ offset: 8, span: 16 }}
-        >
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Form.Item className="ButtonHolder">
           <Button type="primary" htmlType="submit">
             Submit
           </Button>

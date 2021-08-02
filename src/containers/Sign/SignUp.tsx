@@ -12,6 +12,7 @@ const SignUp: React.FC = () => {
       <Title level={3}>Sign up</Title>
       <Form
         name="sign-up"
+        layout="vertical"
         initialValues={{ remember: true }}
         onFinish={(data) => console.log(data)}
         onFinishFailed={(data) => console.log(data)}

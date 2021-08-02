@@ -1,21 +1,29 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setPositionAction } from '../../common/app/actions';
 import {
+  categoriesSelector,
   isUserPositionSelector,
   positionSelector,
 } from '../../common/app/selectors';
-import { Position } from '../../common/app/types';
+import type { Category, Position } from '../../common/app/types';
 
 type ReturnType = {
+  categories: Category[];
+  editMode: boolean;
   isUserPosition: boolean;
   position: Position;
+  setEditMode: (mode: boolean) => void;
+  setNewPosition: (data: Position) => void;
 };
 
 const useMap = (): ReturnType => {
   const dispatch = useDispatch();
 
+  const [editMode, setEditMode] = useState(false);
+
+  const categories = useSelector(categoriesSelector);
   const position = useSelector(positionSelector);
   const isUserPosition = useSelector(isUserPositionSelector);
 
@@ -38,7 +46,19 @@ const useMap = (): ReturnType => {
     );
   }, [dispatch]);
 
-  return { isUserPosition, position };
+  const setNewPosition = useCallback(
+    ({ lat, lon }: Position) => dispatch(setPositionAction({ lat, lon })),
+    [dispatch],
+  );
+
+  return {
+    categories,
+    editMode,
+    isUserPosition,
+    position,
+    setEditMode,
+    setNewPosition,
+  };
 };
 
 export default useMap;

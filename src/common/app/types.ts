@@ -1,11 +1,18 @@
-import { LOG_IN, SET_POSITION } from './constants';
+import { LOG_IN, SET_CATEGORY_TYPES, SET_POSITION } from './constants';
+
+export type Category = {
+  id: string;
+  title: string;
+};
 
 export type Position = {
-  lat: number;
-  lon: number;
+  lat?: number;
+  lon?: number;
+  radius?: number;
 };
 
 export type AppState = {
+  categories: Category[];
   isLogged: boolean;
   position: Position;
   isUserPosition: boolean;
@@ -21,4 +28,12 @@ export type SetPositionAction = {
   payload: Position;
 };
 
-export type AppActionTypes = SignInAction | SetPositionAction;
+export type SetCategoriesAction = {
+  type: typeof SET_CATEGORY_TYPES;
+  payload: Category[];
+};
+
+export type AppActionTypes =
+  | SignInAction
+  | SetCategoriesAction
+  | SetPositionAction;
