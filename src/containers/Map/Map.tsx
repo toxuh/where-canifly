@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import GoogleMapReact from 'google-map-react';
+import useSupercluster from 'use-supercluster';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -15,6 +16,9 @@ import useMap from './useMap';
 import './Map.scss';
 
 const Map: React.FC = () => {
+  const mapRef = useRef<google.maps.Map>();
+  const [bounds, setBounds] = useState<number[] | null>(null);
+
   const { coords, handleAddPoint, handleClick, modal, setModal } =
     useAddPoint();
   const { fetchPoints, points } = useBootstrap();
@@ -29,6 +33,8 @@ const Map: React.FC = () => {
 
   const handleBootstrap = useCallback(
     ({ map }: { map: google.maps.Map }) => {
+      mapRef.current = map;
+
       map.setCenter({
         lat: position.lat as number,
         lng: position.lon as number,
@@ -44,6 +50,22 @@ const Map: React.FC = () => {
     [currentType, position],
   );
 
+  const preparedPoints = points?.map((point) => ({
+    type: 'Point',
+    properties: { cluster: false, crimeId: point.id, category: point.typeId },
+    geometry: {
+      type: 'Point',
+      coordinates: [point.longitude, point.latitude],
+    },
+  }));
+
+  const { clusters } = useSupercluster({
+    points: preparedPoints,
+    bounds,
+    zoom: position.zoom as number,
+    options: { radius: 75, maxZoom: 20 },
+  });
+
   return (
     <section className="Map">
       <GoogleMapReact
@@ -56,6 +78,18 @@ const Map: React.FC = () => {
           if (editMode) {
             handleClick(data);
           }
+        }}
+        onChange={({ zoom, bounds: mapBounds }) => {
+          setNewPosition({
+            zoom,
+          });
+
+          setBounds([
+            mapBounds.nw.lng,
+            mapBounds.se.lat,
+            mapBounds.se.lng,
+            mapBounds.nw.lat,
+          ]);
         }}
         onDragEnd={(map) => {
           const lat = map.getCenter().lat();
@@ -76,10 +110,46 @@ const Map: React.FC = () => {
           fetchPoints({ zoom });
         }}
       >
-        {points?.length &&
+        {
+          clusters?.map((cluster, index) => {
+            const [longitude, latitude] = cluster.geometry.coordinates;
+            const { cluster: isCluster, point_count: pointCount } =
+              cluster.properties;
+
+            if (isCluster) {
+              return (
+                <Point
+                  key={`cluster-${cluster.id}`}
+                  data={points.length ? points[index] : undefined}
+                  lat={latitude}
+                  lng={longitude}
+                >
+                  <div
+                    className="cluster-marker"
+                    style={{
+                      width: `${10 + (pointCount / points.length) * 20}px`,
+                      height: `${10 + (pointCount / points.length) * 20}px`,
+                    }}
+                  >
+                    {pointCount}
+                  </div>
+                </Point>
+              );
+            }
+
+            return (
+              <Point
+                key={`crime-${cluster.properties.crimeId}`}
+                data={points.length ? points[index] : undefined}
+                lat={latitude}
+                lng={longitude}
+              />
+            );
+          }) /* points?.length &&
           points.map((point) => (
             <Point data={point} lat={point.latitude} lng={point.longitude} />
-          ))}
+          )) */
+        }
       </GoogleMapReact>
       {Boolean(types.length) && <Search categories={types} />}
       <Button

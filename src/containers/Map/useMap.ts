@@ -51,7 +51,6 @@ const useMap = (): ReturnType => {
 
   const setNewPosition = useCallback(
     (data: Position) => {
-      console.log(1);
       dispatch(setPositionAction(data));
     },
     [dispatch],
