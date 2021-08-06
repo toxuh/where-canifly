@@ -18,8 +18,14 @@ const Map: React.FC = () => {
   const { coords, handleAddPoint, handleClick, modal, setModal } =
     useAddPoint();
   const { fetchPoints, points } = useBootstrap();
-  const { categories, editMode, position, setEditMode, setNewPosition } =
-    useMap();
+  const {
+    currentType,
+    editMode,
+    position,
+    setEditMode,
+    setNewPosition,
+    types,
+  } = useMap();
 
   const handleBootstrap = useCallback(
     ({ map }: { map: google.maps.Map }) => {
@@ -28,13 +34,14 @@ const Map: React.FC = () => {
         lng: position.lon as number,
       });
 
-      fetchPoints({
-        latitude: position.lat as number,
-        longitude: position.lon as number,
-        radius: position.radius as number,
-      });
+      if (currentType) {
+        fetchPoints({
+          latitude: position.lat as number,
+          longitude: position.lon as number,
+        });
+      }
     },
-    [position],
+    [currentType, position],
   );
 
   return (
@@ -53,23 +60,28 @@ const Map: React.FC = () => {
         onDragEnd={(map) => {
           const lat = map.getCenter().lat();
           const lon = map.getCenter().lng();
-          const zoom = map.getZoom();
 
           setNewPosition({
             lat,
             lon,
-            radius: zoom,
           });
 
-          fetchPoints({ latitude: lat, longitude: lon, radius: zoom });
+          fetchPoints({
+            latitude: lat.toFixed(8),
+            longitude: lon.toFixed(8),
+          });
+        }}
+        onZoomAnimationEnd={(zoom) => {
+          setNewPosition({ zoom });
+          fetchPoints({ zoom });
         }}
       >
-        {points.length &&
+        {points?.length &&
           points.map((point) => (
             <Point data={point} lat={point.latitude} lng={point.longitude} />
           ))}
       </GoogleMapReact>
-      {Boolean(categories.length) && <Search categories={categories} />}
+      {Boolean(types.length) && <Search categories={types} />}
       <Button
         className="AddPointButton"
         shape="circle"

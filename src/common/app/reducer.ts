@@ -1,14 +1,20 @@
-import { LOG_IN, SET_CATEGORY_TYPES, SET_POSITION } from './constants';
+import {
+  LOG_IN,
+  SELECT_CATEGORY,
+  SET_CATEGORY_TYPES,
+  SET_POSITION,
+} from './constants';
 
 import type { AppActionTypes, AppState } from './types';
 
 const initialState: AppState = {
-  categories: [],
+  types: [],
+  currentType: '',
   isLogged: false,
   position: {
     lat: 55.7575757,
     lon: 37.6272607,
-    radius: 14,
+    zoom: 14,
   },
   isUserPosition: false,
 };
@@ -24,14 +30,24 @@ const reducer = (state = initialState, action: AppActionTypes): AppState => {
     case SET_POSITION:
       return {
         ...state,
-        position: action.payload,
+        position: {
+          ...state.position,
+          ...action.payload,
+        },
         isUserPosition: true,
       };
 
     case SET_CATEGORY_TYPES:
       return {
         ...state,
-        categories: action.payload,
+        types: action.payload,
+        currentType: action.payload[0].id,
+      };
+
+    case SELECT_CATEGORY:
+      return {
+        ...state,
+        currentType: action.payload,
       };
 
     default:

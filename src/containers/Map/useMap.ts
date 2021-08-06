@@ -3,19 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { setPositionAction } from '../../common/app/actions';
 import {
-  categoriesSelector,
+  currentTypeSelector,
   isUserPositionSelector,
   positionSelector,
+  typesSelector,
 } from '../../common/app/selectors';
 import type { Category, Position } from '../../common/app/types';
 
 type ReturnType = {
-  categories: Category[];
+  currentType: string;
   editMode: boolean;
   isUserPosition: boolean;
   position: Position;
   setEditMode: (mode: boolean) => void;
   setNewPosition: (data: Position) => void;
+  types: Category[];
 };
 
 const useMap = (): ReturnType => {
@@ -23,9 +25,10 @@ const useMap = (): ReturnType => {
 
   const [editMode, setEditMode] = useState(false);
 
-  const categories = useSelector(categoriesSelector);
+  const currentType = useSelector(currentTypeSelector);
   const position = useSelector(positionSelector);
   const isUserPosition = useSelector(isUserPositionSelector);
+  const types = useSelector(typesSelector);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -47,17 +50,21 @@ const useMap = (): ReturnType => {
   }, [dispatch]);
 
   const setNewPosition = useCallback(
-    ({ lat, lon }: Position) => dispatch(setPositionAction({ lat, lon })),
+    (data: Position) => {
+      console.log(1);
+      dispatch(setPositionAction(data));
+    },
     [dispatch],
   );
 
   return {
-    categories,
+    currentType,
     editMode,
     isUserPosition,
     position,
     setEditMode,
     setNewPosition,
+    types,
   };
 };
 

@@ -25,7 +25,7 @@ const AddPointModal: React.FC<Props> = ({
   setModal,
   onSubmit,
 }) => {
-  const { categories } = useAddPoint();
+  const { types } = useAddPoint();
 
   const [form] = Form.useForm();
 
@@ -84,9 +84,9 @@ const AddPointModal: React.FC<Props> = ({
               })
             }
           >
-            {categories.map((category) => (
-              <Option key={category.id} value={category.id}>
-                {category.title}
+            {types.map((type) => (
+              <Option key={type.id} value={type.id}>
+                {type.title}
               </Option>
             ))}
           </Select>

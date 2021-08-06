@@ -20,7 +20,9 @@ export const isUserPositionSelector = createSelector(
   (app) => app.isUserPosition,
 );
 
-export const categoriesSelector = createSelector(
+export const typesSelector = createSelector(appSelector, (app) => app.types);
+
+export const currentTypeSelector = createSelector(
   appSelector,
-  (app) => app.categories,
+  (app) => app.currentType,
 );

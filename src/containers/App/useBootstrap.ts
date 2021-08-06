@@ -6,22 +6,20 @@ import { getCategories } from '../../api';
 import type { Category } from '../../api';
 
 import { setCategoriesAction, signInAction } from '../../common/app/actions';
-import {
-  categoriesSelector,
-  isLoggedSelector,
-} from '../../common/app/selectors';
+import { isLoggedSelector, typesSelector } from '../../common/app/selectors';
 
 import { checkLsAccessToken } from '../../utils/tokens';
 
 type ReturnType = {
   isLogged: boolean;
+  types: Category[];
 };
 
 const useBootstrap = (): ReturnType => {
   const dispatch = useDispatch();
 
   const isLogged = useSelector(isLoggedSelector);
-  const categories = useSelector(categoriesSelector);
+  const types = useSelector(typesSelector);
 
   const { run: handleFetchCategories } = useRequest<Category[]>(getCategories, {
     manual: true,
@@ -42,13 +40,14 @@ const useBootstrap = (): ReturnType => {
   useEffect(() => checkToken(), []);
 
   useEffect(() => {
-    if (!categories.length && isLogged) {
+    if (!types.length && isLogged) {
       fetchCategories();
     }
-  }, [categories, isLogged]);
+  }, [types, isLogged]);
 
   return {
     isLogged,
+    types,
   };
 };
 

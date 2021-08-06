@@ -3,6 +3,7 @@ import { Input, Select } from 'antd';
 
 import type { Category } from '../../api';
 
+import useSelectCategory from './useSelectCategory';
 import './Search.scss';
 
 type Props = {
@@ -13,6 +14,8 @@ const { Search: AntSearch } = Input;
 const { Option } = Select;
 
 const Search: React.FC<Props> = ({ categories }) => {
+  const { currentType, handleSelectCategory } = useSelectCategory();
+
   return (
     <section className="Search">
       <Input.Group compact>
@@ -20,6 +23,8 @@ const Search: React.FC<Props> = ({ categories }) => {
           className="SelectBox"
           placeholder="Select category"
           optionFilterProp="children"
+          defaultValue={currentType}
+          onChange={(id: string) => handleSelectCategory(id)}
         >
           {categories.map((category) => (
             <Option key={category.id} value={category.id}>

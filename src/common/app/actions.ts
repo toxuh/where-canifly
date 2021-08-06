@@ -1,7 +1,13 @@
-import { LOG_IN, SET_CATEGORY_TYPES, SET_POSITION } from './constants';
+import {
+  LOG_IN,
+  SELECT_CATEGORY,
+  SET_CATEGORY_TYPES,
+  SET_POSITION,
+} from './constants';
 import type {
   Category,
   Position,
+  SelectCategoryAction,
   SetCategoriesAction,
   SetPositionAction,
   SignInAction,
@@ -20,4 +26,9 @@ export const setPositionAction = (data: Position): SetPositionAction => ({
 export const setCategoriesAction = (data: Category[]): SetCategoriesAction => ({
   type: SET_CATEGORY_TYPES,
   payload: data,
+});
+
+export const selectCategoryAction = (id: string): SelectCategoryAction => ({
+  type: SELECT_CATEGORY,
+  payload: id,
 });

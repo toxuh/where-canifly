@@ -5,16 +5,24 @@ import { useRequest } from '@umijs/hooks';
 import { setPointsAction } from '../../common/points/actions';
 import { pointsSelector } from '../../common/points/selectors';
 
+import {
+  currentTypeSelector,
+  positionSelector,
+} from '../../common/app/selectors';
+
 import { getPoints } from '../../api';
-import type { GetPointsDTO, GetPointsType, Point } from '../../api';
+import type { GetPointsDTO, Point, SetNewPositionType } from '../../api';
 
 type ReturnType = {
-  fetchPoints: (params: GetPointsType) => void;
+  fetchPoints: (params: SetNewPositionType) => void;
   points: Point[];
 };
 
 const useBootstrap = (): ReturnType => {
   const dispatch = useDispatch();
+
+  const currentType = useSelector(currentTypeSelector);
+  const currentPosition = useSelector(positionSelector);
 
   const points = useSelector(pointsSelector);
 
@@ -23,12 +31,21 @@ const useBootstrap = (): ReturnType => {
   });
 
   const fetchPoints = useCallback(
-    async (params) => {
-      const data = await handleFetchPoints(params);
+    async ({
+      latitude = currentPosition.lat,
+      longitude = currentPosition.lon,
+      zoom = currentPosition.zoom,
+    }) => {
+      const data = await handleFetchPoints({
+        latitude,
+        longitude,
+        zoom,
+        typeId: currentType,
+      });
 
       dispatch(setPointsAction(data));
     },
-    [dispatch],
+    [currentPosition, currentType, dispatch],
   );
 
   return { fetchPoints, points };

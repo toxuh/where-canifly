@@ -11,7 +11,7 @@ import useBootstrap from './useBootstrap';
 import './App.css';
 
 const App: React.FC = () => {
-  const { isLogged } = useBootstrap();
+  const { isLogged, types } = useBootstrap();
 
   if (!isLogged) {
     return (
@@ -25,11 +25,7 @@ const App: React.FC = () => {
     );
   }
 
-  return (
-    <Layout>
-      <Map />
-    </Layout>
-  );
+  return <Layout>{types.length && <Map />}</Layout>;
 };
 
 export default App;

@@ -16,6 +16,7 @@ import {
   GetPointsType,
   Point,
   Position,
+  SetNewPositionType,
 } from './points/types';
 
 export type {
@@ -29,6 +30,7 @@ export type {
   SignInType,
   SignUpDTO,
   SignUpType,
+  SetNewPositionType,
 };
 
 export { addPoint, getCategories, getPoints, signIn, signUp };
